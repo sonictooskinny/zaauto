@@ -1,0 +1,25 @@
+
+name: Refresh Cairo restaurant leads
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 6 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  build-leads:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Run free lead finder
+        run: python lead_finder.py
+      - name: Save leads CSV
+        uses: actions/upload-artifact@v4
+        with:
+          name: cairo-restaurant-leads
+          path: restaurant_leads.csv
+          retention-days: 30
